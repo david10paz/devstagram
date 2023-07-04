@@ -5,3 +5,8 @@ Escribes  ./vendor/bin/sail up -> Con ello puedes arrancar el proyecto (ACTUALME
 PARA FINALIZAR QUE ESTE CORRIENDO EL PROYECTO ./vendor/bin/sail up (ACTUALMENTE CON sail down es suficiente)
 
 //VAMOS A UTILIZAR POR EL MOMENTO LARAGON PERO SERÍA ASÍ LA INSTALACIÓN DE DOCKER
+
+
+//TAILWIND CSS
+
+Para que nos corra y nos recoja los campios debemos de tirar dentro del proyecto devstagram: 'npm run dev' o 'npm run watch'
