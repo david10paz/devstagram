@@ -50,4 +50,3 @@ dropzone.on('removedfile', function () {
     //Reseteamos el campo si hay algo ya establecido en su value
     document.querySelector('[name="imagen"]').value = '';
 });
-

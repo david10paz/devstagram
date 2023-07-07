@@ -5,18 +5,28 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class PostController extends Controller
 {
 
     public function __construct()
     {
-        $this->middleware('auth'); //Si no esta iniciado en sesión llama al middleware de Authenticate y si es así te retorna al login antes que mandarte al muro
+        $this->middleware('auth')->except('show', 'index'); 
+        //Si no esta iniciado en sesión llama al middleware de Authenticate y si es así 
+        //te retorna al login antes que mandarte al muro
+        
+        //Le añadimos el except de show porque no hace falta estar logueado para ver el post
+        //Le añadimos el except de index porque no hace falta estar logueado para ver el perfil del usuario, 
+        //posterior le añadiremos la condición de no poder seguir si no estas logueado
     }
 
     public function index(User $user){
         //dd($user->username);
-        return view('dashboard', ['user' => $user]);
+
+        $posts = Post::where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(4);
+
+        return view('dashboard', ['user' => $user, 'posts' => $posts]);
     }
 
     public function create(User $user){
@@ -59,5 +69,21 @@ class PostController extends Controller
 
         return redirect()->route('posts.index', auth()->user()->username);
 
+    }
+
+    public function show(User $user, Post $post){
+        return view('posts.show', ['user' => $user, 'post' => $post]); 
+    }
+
+    public function destroy(Post $post){
+        $post->delete();
+
+        //Ahora eliminamos la imagen para no tenerla almacenada
+        $imagen_path = public_path('uploads/' . $post->imagen);
+        if(File::exists($imagen_path)){
+            unlink($imagen_path);
+        }
+
+        return redirect()->route('posts.index', auth()->user()->username);
     }
 }

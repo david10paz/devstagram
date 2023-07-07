@@ -11,6 +11,9 @@
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 
 </head>
 
@@ -22,7 +25,7 @@
             </a>
 
             @auth
-                <nav class="flex gap-2 items-center">
+                <nav class="flex gap-3 items-center">
                     <a href="{{ route('posts.create') }}"
                         class="flex items-center gap-2 bg-white border p-2 text-gray-600 rounded text-sm uppercase font-bold cursor-pointer">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -45,7 +48,7 @@
             @endauth
 
             @guest
-                <nav class="flex gap-2 items-center">
+                <nav class="flex gap-3 items-center">
                     <a href="{{ route('login') }}" class="font-bold uppercase text-gray-600 text-sm">Login</a>
                     <a href="{{ route('register') }}" class="font-bold uppercase text-gray-600 text-sm">Crear cuenta</a>
                 </nav>
