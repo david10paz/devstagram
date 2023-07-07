@@ -7,7 +7,10 @@ PARA FINALIZAR QUE ESTE CORRIENDO EL PROYECTO ./vendor/bin/sail up (ACTUALMENTE 
 //VAMOS A UTILIZAR POR EL MOMENTO LARAGON PERO SERÍA ASÍ LA INSTALACIÓN DE DOCKER
 
 
-//TAILWIND CSS -> Para que nos corra y nos recoja los campios debemos de tirar dentro del proyecto devstagram: 'npm run dev' o 'npm run watch'
+//npm run watch -> TIRAR DENTRO DE LA CARPETA DEL PROYECTO PARA QUE CORRA TAILWIND
+
+//TAILWIND CSS -> Para que nos corra y nos recoja los campios debemos de tirar dentro del proyecto devstagram: 'npm run dev' o 'npm run watch'.
+Su configuración se hizo en el documento tailwind.config.js
 //HEROICONS -> Lo utilizamos para emojis, solo copiar y pegar desde la web el svg. https://heroicons.com/
 //DROPZONE -> Para subir imagenes, lo hemos configurado en el app.js y nos vale para las subidas de posts. Consultar tambien PostController, Post (Model) y PostFactory (abajo explicado lo hecho) https://docs.dropzone.dev/getting-started/installation/npm-or-yarn.
 //INTERVENTION IMAGE -> Para establecer guardados de imagenes, se instala como en la web se indica con composer y se añaden dos líneas en el config/app.php . Seguir instrucciones de la web https://image.intervention.io/v2/introduction/installation
