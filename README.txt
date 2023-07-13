@@ -16,6 +16,8 @@ Su configuración se hizo en el documento tailwind.config.js
 //INTERVENTION IMAGE -> Para establecer guardados de imagenes, se instala como en la web se indica con composer y se añaden dos líneas en el config/app.php . Seguir instrucciones de la web https://image.intervention.io/v2/introduction/installation
 
 
+Ctrl + P -> Buscar archivos en el proyecto
+
 //Models + Migrations + Factory
 Ya conocías Models y Migrations. Factory es como un tester hacia lo que vas a hacer. 
 Por ejemplo, se ha creado PostFactory.php, dentro de la carpeta 'factories', y en el archivo hemos establecido unas pruebas de insercción de posts.
@@ -26,3 +28,8 @@ En cuanto a Models hemos creado 2 funciones en User y Post, una hasMany y otra b
 Por ejemplo en el de user que hemos hecho un hasMany de los posts:
 $user = User::find(6)
 $user->posts //Directamente te saca los posts del usuario, mirar en el modelo como se ha establecido para que esto sea así
+
+Hemos realizado la función de dar y quitar likes a los posts mediante Livewire, se intala escribiendo composer require livewire/livewire
+Posteriormente en el app.blade.php hemos añadido  @livewireStyles y @livewireScripts (Esta es la documentación de instalación https://laravel-livewire.com/docs/2.x/installation)
+Luego hemos escrito php artisan make:livewire likes-post y nos crea 2 archivos uno para la vista like-post.blade.php y otro como de controlador LikePost.php
+Consultar en estos 2 archivos lo que se ha hecho y como se pinta en la vista de /posts/show.blade.php
