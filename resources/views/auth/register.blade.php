@@ -39,7 +39,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="password" class="mb-2 block uppercase text-gray-500 font-bold">Password</label>
-                    <input type="text" id="password" name="password" placeholder="Tu password de registro"
+                    <input type="password" id="password" name="password" placeholder="Tu password de registro"
                         class="border p-3 w-full rounded-lg @error('password') border-red-500 @enderror" />
                         @error('password')
                     <p class="bg-red-500 text-white rounded-lg text-sm text-center p-2 mt-2">{{$message}}</p>
@@ -48,7 +48,7 @@
                 <div class="mb-3">
                     <label for="password_confirmation" class="mb-2 block uppercase text-gray-500 font-bold">Repetir
                         password</label>
-                    <input type="text" id="password_confirmation" name="password_confirmation"
+                    <input type="password" id="password_confirmation" name="password_confirmation"
                         placeholder="Repite tu password de registro" class="border p-3 w-full rounded-lg" />
                 </div>
 

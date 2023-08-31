@@ -1,3 +1,5 @@
+import 'flowbite';
+
 //require('./bootstrap');
 
 import { Dropzone } from "dropzone";

@@ -17,7 +17,25 @@
             </div>
             <div class="md:w-6/12 lg:w-6/12 px-5 flex flex-col md:items-start md:justify-center items-center py-10 md:py-10">
                 <div class="flex gap-2">
-                    <p class="text-gray-700 text-2xl mb-5">{{ $user->username }}</p>
+                    <p class="text-gray-700 text-2xl mb-5">
+                        {{ $user->username }}
+
+                        @auth
+                            @if ($user->id != auth()->user()->id)
+                                @if ($user->tesigue(auth()->user()))
+                                    <span
+                                        class=" text-blue-700  focus:ring-4 focus:outline-none font-bold rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 ">
+                                        Te sigue
+                                    </span>
+                                @else
+                                    <span
+                                        class=" text-red-700 focus:ring-4 focus:outline-none font-bold rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600">
+                                        No te sigue
+                                    </span>
+                                @endif
+                            @endif
+                        @endauth
+                    </p>
 
                     @auth
                         @if (auth()->user()->id == $user->id)
@@ -33,10 +51,15 @@
                     @endauth
                 </div>
 
-                <p class="text-gray-800 text-sm mb-3 font-bold">{{$user->followers->count()}}<span class="font-normal"> seguidores</span></p>
-                <p class="text-gray-800 text-sm mb-3 font-bold">{{$user->followings->count()}}<span class="font-normal"> siguiendo</span></p>
+                <p class="text-gray-800 text-sm mb-3 font-bold">{{ $user->followers->count() }}<span class="font-normal">
+                        seguidores</span></p>
+                <p class="text-gray-800 text-sm mb-3 font-bold">{{ $user->followings->count() }}<span class="font-normal">
+                        siguiendo</span></p>
                 <p class="text-gray-800 text-sm mb-3 font-bold">{{ $user->posts->count() }}<span class="font-normal">
                         posts</span></p>
+
+
+
 
                 @auth
                     @if ($user->id != auth()->user()->id)
