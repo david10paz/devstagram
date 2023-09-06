@@ -30,9 +30,9 @@
                 </a>
             </div>
 
-            <div class="md:w-1/2">
 
-                @auth
+            @auth
+                <div class="md:w-1/2">
                     <nav class="flex gap-6 items-center">
                         <a href="{{ route('posts.create') }}"
                             class="flex items-center gap-2 bg-white border p-2 text-gray-600 rounded text-sm uppercase font-bold cursor-pointer">
@@ -63,15 +63,18 @@
                             <button type="submit" class="font-bold uppercase text-gray-600 text-sm">Cerrar sesión</button>
                         </form>
                     </nav>
-                @endauth
+                </div>
+            @endauth
 
-                @guest
+            @guest
+                <div>
                     <nav class="flex gap-3 items-center">
                         <a href="{{ route('login') }}" class="font-bold uppercase text-gray-600 text-sm">Login</a>
                         <a href="{{ route('register') }}" class="font-bold uppercase text-gray-600 text-sm">Crear cuenta</a>
                     </nav>
-                @endguest
-            </div>
+                </div>
+            @endguest
+
 
         </div>
     </header>
