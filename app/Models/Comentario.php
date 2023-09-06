@@ -18,4 +18,12 @@ class Comentario extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+
+    public function likeComentarios(){
+        return $this->hasMany(LikeComentario::class);
+    }
+
+    public function checkLikeComentarios(User $user){
+        return $this->likeComentarios->contains('user_id' , $user->id);
+    }
 }

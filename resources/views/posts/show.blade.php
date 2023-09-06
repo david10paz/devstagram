@@ -12,7 +12,7 @@
             <img src="/uploads/{{ $post->imagen }}" alt="Imagen {{ $post->titulo }}">
             <div class="p-3 flex items-center gap-4">
                 @auth
-                    <livewire:like-post :post="$post"/>
+                    <livewire:like-post :post="$post" />
 
                     {{-- Esto de abajo funciona, pero vamos a hacerlo con livewire para que le sea reactivo el darle like o no --}}
                     {{--
@@ -69,10 +69,10 @@
 
                         <!-- Intento de borrado mediante JS-->
                         <!--form id="form-delete-post" onsubmit="deletePost({{ $post->id }})">
-                                            @csrf
-                                            <input type="submit" value="Eliminar publicación"
-                                                class="bg-red-600 transition-colors cursor-pointer uppercase font-bold w-full p-3 text-white rounded-lg" />
-                                        </form-->
+                                                                    @csrf
+                                                                    <input type="submit" value="Eliminar publicación"
+                                                                        class="bg-red-600 transition-colors cursor-pointer uppercase font-bold w-full p-3 text-white rounded-lg" />
+                                                                </form-->
                     </div>
                 @endif
             @endauth
@@ -119,10 +119,19 @@
                                     ->first();
                             @endphp
                             <div class="p-5 border-gray-300 border-b">
-                                <p><a href="{{ route('posts.index', $comentario->user->username) }}"
-                                        class="font-bold">{{ $comentario->user->username }}:
-                                    </a>{{ $comentario->comentario }}</p>
-                                <small>{{ $comentario->created_at->diffForHumans() }}</small>
+                                <div class="container mx-auto md:flex gap-6">
+                                    <div class="md:w-1/2">
+                                        <p><a href="{{ route('posts.index', $comentario->user->username) }}"
+                                                class="font-bold">{{ $comentario->user->username }}:
+                                            </a>{{ $comentario->comentario }}</p>
+                                        <small>{{ $comentario->created_at->diffForHumans() }}</small>
+                                    </div>
+                                    @auth
+                                        <div class="md:w-1/2">
+                                            <p><livewire:like-comentario-post :comentario="$comentario" /></p>
+                                        </div>
+                                    @endauth
+                                </div>
                             </div>
                         @endforeach
                     @endif

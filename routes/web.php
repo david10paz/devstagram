@@ -10,6 +10,7 @@ use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\Select2SearchController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,6 +25,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+
+//Routes search
+Route::get('/ajax-autocomplete-search', [Select2SearchController::class, 'selectSearch']);
+
 
 Route::get('/register', [RegisterController::class, 'index'])->name('register');
 Route::post('/register', [RegisterController::class, 'store']);
