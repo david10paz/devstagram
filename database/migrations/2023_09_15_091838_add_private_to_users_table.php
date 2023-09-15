@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddImagenFieldToUsersTable extends Migration
+class AddPrivateToUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddImagenFieldToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('imagen')->nullable();
+            $table->boolean('privado')->default(0);
         });
     }
 
@@ -26,7 +26,7 @@ class AddImagenFieldToUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('imagen')->nullable();
+            $table->dropColumn('privado');
         });
     }
 }

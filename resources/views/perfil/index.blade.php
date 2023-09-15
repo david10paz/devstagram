@@ -20,6 +20,18 @@
                     @enderror
                 </div>
                 <div class="mb-3">
+                    <label for="username" class="mb-2 block uppercase text-gray-500 font-bold">Tipo de cuenta</label>
+                    <select id="tipo_cuenta" name="tipo_cuenta"
+                        class="w-full rounded-md shadow-sm focus:border-indigo-300 focus:ring 
+                        focus:ring-indigo-200 focus:ring-opacity-50  @error('tipo_cuenta') border-red-500 @enderror">
+                        <option value="1">Privada</option>
+                        <option value="0">Pública</option>
+                    </select>
+                    @error('tipo_cuenta')
+                        <p class="bg-red-500 text-white rounded-lg text-sm text-center p-2 mt-2">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div class="mb-3">
                     <label for="imagen" class="mb-2 block uppercase text-gray-500 font-bold">Imagen perfil</label>
                     <input type="file" id="imagen" name="imagen" class="border p-3 w-full rounded-lg"
                         accept=".jpg, .jpeg, .png" />

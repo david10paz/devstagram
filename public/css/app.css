@@ -1063,6 +1063,9 @@ input:checked + .toggle-bg {
 .ml-auto {
   margin-left: auto;
 }
+.mr-3 {
+  margin-right: 0.75rem;
+}
 .mt-10 {
   margin-top: 2.5rem;
 }
@@ -1336,6 +1339,10 @@ input:checked + .toggle-bg {
   --tw-border-opacity: 1;
   border-color: rgb(243 244 246 / var(--tw-border-opacity));
 }
+.border-gray-200 {
+  --tw-border-opacity: 1;
+  border-color: rgb(229 231 235 / var(--tw-border-opacity));
+}
 .border-gray-300 {
   --tw-border-opacity: 1;
   border-color: rgb(209 213 219 / var(--tw-border-opacity));
@@ -1376,6 +1383,10 @@ input:checked + .toggle-bg {
   --tw-bg-opacity: 1;
   background-color: rgb(5 122 85 / var(--tw-bg-opacity));
 }
+.bg-green-800 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(3 84 63 / var(--tw-bg-opacity));
+}
 .bg-red-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(240 82 82 / var(--tw-bg-opacity));
@@ -1383,6 +1394,10 @@ input:checked + .toggle-bg {
 .bg-red-600 {
   --tw-bg-opacity: 1;
   background-color: rgb(224 36 36 / var(--tw-bg-opacity));
+}
+.bg-red-800 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(155 28 28 / var(--tw-bg-opacity));
 }
 .bg-sky-700 {
   --tw-bg-opacity: 1;
@@ -1428,6 +1443,10 @@ input:checked + .toggle-bg {
 .px-10 {
   padding-left: 2.5rem;
   padding-right: 2.5rem;
+}
+.px-12 {
+  padding-left: 3rem;
+  padding-right: 3rem;
 }
 .px-2 {
   padding-left: 0.5rem;
@@ -1558,6 +1577,10 @@ input:checked + .toggle-bg {
   --tw-text-opacity: 1;
   color: rgb(17 24 39 / var(--tw-text-opacity));
 }
+.text-pink-600 {
+  --tw-text-opacity: 1;
+  color: rgb(214 31 105 / var(--tw-text-opacity));
+}
 .text-red-700 {
   --tw-text-opacity: 1;
   color: rgb(200 30 30 / var(--tw-text-opacity));
@@ -1565,6 +1588,10 @@ input:checked + .toggle-bg {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+.text-yellow-400 {
+  --tw-text-opacity: 1;
+  color: rgb(227 160 8 / var(--tw-text-opacity));
 }
 .opacity-0 {
   opacity: 0;
@@ -1868,8 +1895,16 @@ input:checked + .toggle-bg {
     display: flex;
   }
 
+  .md\:w-1\/12 {
+    width: 8.333333%;
+  }
+
   .md\:w-1\/2 {
     width: 50%;
+  }
+
+  .md\:w-1\/6 {
+    width: 16.666667%;
   }
 
   .md\:w-2\/5 {

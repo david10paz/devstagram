@@ -30,7 +30,6 @@
                 </a>
             </div>
 
-
             @auth
                 <div class="md:w-1/2">
                     <nav class="flex gap-6 items-center">
@@ -57,6 +56,11 @@
                                 name="livesearch"></select>
                         </div>
 
+                        @if (auth()->user()->privado == 1)
+                            <a href="{{ route('users.show-confirmar-follow', auth()->user()->username) }}"
+                                class="font-bold text-pink-600 text-sm">Solic. de seguimiento</span></a>
+                        @endif
+
 
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
@@ -70,7 +74,8 @@
                 <div>
                     <nav class="flex gap-3 items-center">
                         <a href="{{ route('login') }}" class="font-bold uppercase text-gray-600 text-sm">Login</a>
-                        <a href="{{ route('register') }}" class="font-bold uppercase text-gray-600 text-sm">Crear cuenta</a>
+                        <a href="{{ route('register') }}" class="font-bold uppercase text-gray-600 text-sm">Crear
+                            cuenta</a>
                     </nav>
                 </div>
             @endguest

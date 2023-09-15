@@ -8,14 +8,21 @@
 
 @section('contenido')
     <div class="container mx-auto md:flex gap-6">
-        <div class="md:w-1/2">
-            <img src="/uploads/{{ $post->imagen }}" alt="Imagen {{ $post->titulo }}">
-            <div class="p-3 flex items-center gap-4">
-                @auth
-                    <livewire:like-post :post="$post" />
 
-                    {{-- Esto de abajo funciona, pero vamos a hacerlo con livewire para que le sea reactivo el darle like o no --}}
-                    {{--
+        <!-- Si estas logueado -->
+        @auth
+            @if ($user->privado == 1 && !$user->siguiendo(auth()->user()) && $user->id != auth()->user()->id)
+                <p class="text-gray-400 uppercase text-sm text-center font-bold">Esta cuenta es privada, síguela para poder ver
+                    su contenido.</p>
+            @else
+                <div class="md:w-1/2">
+                    <img src="/uploads/{{ $post->imagen }}" alt="Imagen {{ $post->titulo }}">
+                    <div class="p-3 flex items-center gap-4">
+                        @auth
+                            <livewire:like-post :post="$post" />
+
+                            {{-- Esto de abajo funciona, pero vamos a hacerlo con livewire para que le sea reactivo el darle like o no --}}
+                            {{--
                     @if ($post->checkLike(auth()->user()))
                         <form action="{{ route('posts.likes.destroy', $post) }}" method="POST">
                             @csrf
@@ -45,99 +52,211 @@
                         </form>
                     @endif
                     --}}
-                @endauth
-                {{-- Esto también lo comentamos porque vamos a hacerlo en livewire, pero funciona igual junto con lo arriba comentado --}}
-                {{--
+                        @endauth
+                        {{-- Esto también lo comentamos porque vamos a hacerlo en livewire, pero funciona igual junto con lo arriba comentado --}}
+                        {{--
                 <p><span class="font-bold">{{ $post->likes->count() }}</span> likes</p>
                 --}}
-            </div>
-
-            <div>
-                <p class="text-gray-500 font-bold">{{ $post->created_at->diffForHumans() }}</p>
-            </div>
-
-            @auth
-                @if ($post->user_id == auth()->user()->id)
-                    <div class="mt-3">
-                        <form action="{{ route('posts.destroy', $post) }}" method="POST">
-                            @method('DELETE')
-                            <!-- SPOOFING para eliminar registros -->
-                            @csrf
-                            <input type="submit" value="Eliminar publicación"
-                                class="bg-red-600 transition-colors cursor-pointer uppercase font-bold w-full p-3 text-white rounded-lg" />
-                        </form>
-
-                        <!-- Intento de borrado mediante JS-->
-                        <!--form id="form-delete-post" onsubmit="deletePost({{ $post->id }})">
-                                                                    @csrf
-                                                                    <input type="submit" value="Eliminar publicación"
-                                                                        class="bg-red-600 transition-colors cursor-pointer uppercase font-bold w-full p-3 text-white rounded-lg" />
-                                                                </form-->
                     </div>
-                @endif
-            @endauth
-        </div>
-        <div class="md:w-1/2">
-            {{ $post->descripcion }}
 
-            <div class="bg-white shadow p-5 mt-5">
-                @auth
+                    <div>
+                        <p class="text-gray-500 font-bold">{{ $post->created_at->diffForHumans() }}</p>
+                    </div>
 
-                    @if (session('mensaje'))
-                        <p class="bg-green-600 text-white rounded-lg text-sm text-center p-2 mb-3">{{ session('mensaje') }}</p>
-                    @endif
+                    @auth
+                        @if ($post->user_id == auth()->user()->id)
+                            <div class="mt-3">
+                                <form action="{{ route('posts.destroy', $post) }}" method="POST">
+                                    @method('DELETE')
+                                    <!-- SPOOFING para eliminar registros -->
+                                    @csrf
+                                    <input type="submit" value="Eliminar publicación"
+                                        class="bg-red-600 transition-colors cursor-pointer uppercase font-bold w-full p-3 text-white rounded-lg" />
+                                </form>
 
-                    <p class="text-xl font-bold text-center">Agrega un nuevo comentario</p>
-
-                    <form action="{{ route('comentarios.store', [$user, $post]) }}" method="POST">
-                        @csrf
-                        <div class="mb-3 mt-5">
-                            <label for="comentario" class="mb-2 block uppercase text-gray-500 font-bold">Comentario</label>
-                            <textarea id="comentario" name="comentario" placeholder="Agrega un comentario"
-                                class="border p-3 w-full rounded-lg @error('comentario') border-red-500 @enderror"></textarea>
-                            @error('comentario')
-                                <p class="bg-red-500 text-white rounded-lg text-sm text-center p-2 mt-2">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <input type="submit" value="Comentar"
-                            class="bg-sky-700 transition-colors cursor-pointer uppercase font-bold w-full p-3 text-white rounded-lg" />
-
-                    </form>
-                @endauth
-
-                <div class="bg-white shadow mb-5 max-h-96 overflow-y-scroll mt-6">
-                    @if ($post->comentarios->count() <= 0)
-                        <p class="text-gray-400 uppercase text-sm text-center font-bold">No hay comentarios todavía :(</p>
-                    @else
-                        @foreach ($post->comentarios as $comentario)
-                            @php
-                                //Esto sería una manera de sacarlo, pero vamos a hacerlo por una funcion del modelo de Comentario
-                                //Si no sería llamar a $user_comentario->username
-                                $user_comentario = DB::table('users')
-                                    ->where('id', $comentario->user_id)
-                                    ->first();
-                            @endphp
-                            <div class="p-5 border-gray-300 border-b">
-                                <div class="container mx-auto md:flex gap-6">
-                                    <div class="md:w-1/2">
-                                        <p><a href="{{ route('posts.index', $comentario->user->username) }}"
-                                                class="font-bold">{{ $comentario->user->username }}:
-                                            </a>{{ $comentario->comentario }}</p>
-                                        <small>{{ $comentario->created_at->diffForHumans() }}</small>
-                                    </div>
-                                    @auth
-                                        <div class="md:w-1/2">
-                                            <p><livewire:like-comentario-post :comentario="$comentario" /></p>
-                                        </div>
-                                    @endauth
-                                </div>
+                                <!-- Intento de borrado mediante JS-->
+                                <!--form id="form-delete-post" onsubmit="deletePost({{ $post->id }})">
+                                                                                                                    @csrf
+                                                                                                                    <input type="submit" value="Eliminar publicación"
+                                                                                                                        class="bg-red-600 transition-colors cursor-pointer uppercase font-bold w-full p-3 text-white rounded-lg" />
+                                                                                                                </form-->
                             </div>
-                        @endforeach
-                    @endif
+                        @endif
+                    @endauth
                 </div>
-            </div>
-        </div>
+                <div class="md:w-1/2">
+                    {{ $post->descripcion }}
+
+                    <div class="bg-white shadow p-5 mt-5">
+                        @auth
+
+                            @if (session('mensaje'))
+                                <p class="bg-green-600 text-white rounded-lg text-sm text-center p-2 mb-3">{{ session('mensaje') }}
+                                </p>
+                            @endif
+
+                            <p class="text-xl font-bold text-center">Agrega un nuevo comentario</p>
+
+                            <form action="{{ route('comentarios.store', [$user, $post]) }}" method="POST">
+                                @csrf
+                                <div class="mb-3 mt-5">
+                                    <label for="comentario" class="mb-2 block uppercase text-gray-500 font-bold">Comentario</label>
+                                    <textarea id="comentario" name="comentario" placeholder="Agrega un comentario"
+                                        class="border p-3 w-full rounded-lg @error('comentario') border-red-500 @enderror"></textarea>
+                                    @error('comentario')
+                                        <p class="bg-red-500 text-white rounded-lg text-sm text-center p-2 mt-2">{{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+
+                                <input type="submit" value="Comentar"
+                                    class="bg-sky-700 transition-colors cursor-pointer uppercase font-bold w-full p-3 text-white rounded-lg" />
+
+                            </form>
+                        @endauth
+
+                        <div class="bg-white shadow mb-5 max-h-96 overflow-y-scroll mt-6">
+                            @if ($post->comentarios->count() <= 0)
+                                <p class="text-gray-400 uppercase text-sm text-center font-bold">No hay comentarios todavía :(
+                                </p>
+                            @else
+                                @foreach ($post->comentarios as $comentario)
+                                    @php
+                                        //Esto sería una manera de sacarlo, pero vamos a hacerlo por una funcion del modelo de Comentario
+                                        //Si no sería llamar a $user_comentario->username
+                                        $user_comentario = DB::table('users')
+                                            ->where('id', $comentario->user_id)
+                                            ->first();
+                                    @endphp
+                                    <div class="p-5 border-gray-300 border-b">
+                                        <div class="container mx-auto md:flex gap-6">
+                                            <div class="md:w-1/2">
+                                                <p><a href="{{ route('posts.index', $comentario->user->username) }}"
+                                                        class="font-bold">{{ $comentario->user->username }}:
+                                                    </a>{{ $comentario->comentario }}</p>
+                                                <small>{{ $comentario->created_at->diffForHumans() }}</small>
+                                            </div>
+                                            @auth
+                                                <div class="md:w-1/2">
+                                                    <p><livewire:like-comentario-post :comentario="$comentario" /></p>
+                                                </div>
+                                            @endauth
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            @endif
+        @endauth
+
+
+        <!-- Si no estas logueado -->
+        @guest
+            @if ($user->privado == 0)
+                <div class="md:w-1/2">
+                    <img src="/uploads/{{ $post->imagen }}" alt="Imagen {{ $post->titulo }}">
+                    <div class="p-3 flex items-center gap-4">
+                        @auth
+                            <livewire:like-post :post="$post" />
+                        @endauth
+                    </div>
+
+                    <div>
+                        <p class="text-gray-500 font-bold">{{ $post->created_at->diffForHumans() }}</p>
+                    </div>
+
+                    @auth
+                        @if ($post->user_id == auth()->user()->id)
+                            <div class="mt-3">
+                                <form action="{{ route('posts.destroy', $post) }}" method="POST">
+                                    @method('DELETE')
+                                    <!-- SPOOFING para eliminar registros -->
+                                    @csrf
+                                    <input type="submit" value="Eliminar publicación"
+                                        class="bg-red-600 transition-colors cursor-pointer uppercase font-bold w-full p-3 text-white rounded-lg" />
+                                </form>
+
+                                <!-- Intento de borrado mediante JS-->
+                                <!--form id="form-delete-post" onsubmit="deletePost({{ $post->id }})">
+                                                                                                            @csrf
+                                                                                                            <input type="submit" value="Eliminar publicación"
+                                                                                                                class="bg-red-600 transition-colors cursor-pointer uppercase font-bold w-full p-3 text-white rounded-lg" />
+                                                                                                        </form-->
+                            </div>
+                        @endif
+                    @endauth
+                </div>
+                <div class="md:w-1/2">
+                    {{ $post->descripcion }}
+
+                    <div class="bg-white shadow p-5 mt-5">
+                        @auth
+
+                            @if (session('mensaje'))
+                                <p class="bg-green-600 text-white rounded-lg text-sm text-center p-2 mb-3">{{ session('mensaje') }}
+                                </p>
+                            @endif
+
+                            <p class="text-xl font-bold text-center">Agrega un nuevo comentario</p>
+
+                            <form action="{{ route('comentarios.store', [$user, $post]) }}" method="POST">
+                                @csrf
+                                <div class="mb-3 mt-5">
+                                    <label for="comentario" class="mb-2 block uppercase text-gray-500 font-bold">Comentario</label>
+                                    <textarea id="comentario" name="comentario" placeholder="Agrega un comentario"
+                                        class="border p-3 w-full rounded-lg @error('comentario') border-red-500 @enderror"></textarea>
+                                    @error('comentario')
+                                        <p class="bg-red-500 text-white rounded-lg text-sm text-center p-2 mt-2">{{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+
+                                <input type="submit" value="Comentar"
+                                    class="bg-sky-700 transition-colors cursor-pointer uppercase font-bold w-full p-3 text-white rounded-lg" />
+
+                            </form>
+                        @endauth
+
+                        <div class="bg-white shadow mb-5 max-h-96 overflow-y-scroll mt-6">
+                            @if ($post->comentarios->count() <= 0)
+                                <p class="text-gray-400 uppercase text-sm text-center font-bold">No hay comentarios todavía :(
+                                </p>
+                            @else
+                                @foreach ($post->comentarios as $comentario)
+                                    @php
+                                        //Esto sería una manera de sacarlo, pero vamos a hacerlo por una funcion del modelo de Comentario
+                                        //Si no sería llamar a $user_comentario->username
+                                        $user_comentario = DB::table('users')
+                                            ->where('id', $comentario->user_id)
+                                            ->first();
+                                    @endphp
+                                    <div class="p-5 border-gray-300 border-b">
+                                        <div class="container mx-auto md:flex gap-6">
+                                            <div class="md:w-1/2">
+                                                <p><a href="{{ route('posts.index', $comentario->user->username) }}"
+                                                        class="font-bold">{{ $comentario->user->username }}:
+                                                    </a>{{ $comentario->comentario }}</p>
+                                                <small>{{ $comentario->created_at->diffForHumans() }}</small>
+                                            </div>
+                                            @auth
+                                                <div class="md:w-1/2">
+                                                    <p><livewire:like-comentario-post :comentario="$comentario" /></p>
+                                                </div>
+                                            @endauth
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            @else
+                <p class="text-gray-400 uppercase text-sm text-center font-bold">Esta cuenta es privada, no tienes nada que ver.
+                </p>
+            @endif
+        @endguest
     </div>
 @endsection
 

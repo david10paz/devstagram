@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ConfirmUser;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -31,6 +32,7 @@ class PerfilController extends Controller
         //no me diga que ese usuario esta tomado y no me deje editar mi perfil  
         $this->validate($request, [
             'username' => 'required|unique:users,username,' . auth()->user()->id . '|min:3|max:20',
+            'tipo_cuenta' => 'required',
         ]);
 
         //Compruebo si tiene imagen ya el usuario
@@ -59,7 +61,21 @@ class PerfilController extends Controller
         //Si tenía imagen y no la cambia se mantiene la que tenía
         //Si no tenía o tenía imagen y la cambia pues se le ha hecho el proceso de cambio
         $usuario->imagen = $nombreImagen;
+
+
+        $usuario->privado = $request->tipo_cuenta;
         $usuario->save();
+
+        if ($request->tipo_cuenta == 0) {
+            //Si el tío dice que quiere cambiar su cuenta a pública, lo que vamos a hacer es aceptarle las solicitudes que tenga si
+            //es que anteriormente su cuenta era privada.
+            $usuarios_para_confirmar = ConfirmUser::where('user_id', $usuario->id)->get();
+            foreach ($usuarios_para_confirmar as $usuario_para_confirmar) {
+                $usuario->followers()->attach($usuario_para_confirmar->user_solicitante_id);
+            }
+            //Luego por último al ya ser seguidores y haberles aceptado dichas solicitudes, borramos las solicitudes
+            ConfirmUser::where('user_id', $usuario->id)->delete();
+        }
 
         return redirect()->route('posts.index', $usuario->username);
     }

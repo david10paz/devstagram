@@ -39,25 +39,28 @@ Route::post('/login', [LoginController::class, 'store']);
 Route::post('/logout', [LogoutController::class, 'store'])->name('logout');
 
 //Ruta para el perfil
-Route::get('/editar-perfil', [PerfilController::class, 'index'])->name('perfil.index');
+Route::get('/editar-perfil', [PerfilController::class, 'index'])->middleware(['auth'])->name('perfil.index');
 Route::post('/editar-perfil', [PerfilController::class, 'store'])->name('perfil.store');
 
 
 Route::get('/{user:username}', [PostController::class, 'index'])->name('posts.index');
-Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
+Route::get('/posts/create', [PostController::class, 'create'])->middleware(['auth'])->name('posts.create');
 Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
 Route::get('/{user:username}/posts/{post}', [PostController::class, 'show'])->name('posts.show');
 Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
 
-Route::post('/{user:username}/posts/{post}', [ComentarioController::class, 'store'])->name('comentarios.store');
+Route::post('/{user:username}/posts/{post}', [ComentarioController::class, 'store'])->middleware(['auth'])->name('comentarios.store');
 
-Route::post('/imagenes', [ImagenController::class, 'store'])->name('imagenes.store');
+Route::post('/imagenes', [ImagenController::class, 'store'])->middleware(['auth'])->name('imagenes.store');
 
 //Like fotos
-Route::post('/posts/{post}/likes', [LikeController::class, 'store'])->name('posts.likes.store');
-Route::delete('/posts/{post}/likes', [LikeController::class, 'destroy'])->name('posts.likes.destroy');
+Route::post('/posts/{post}/likes', [LikeController::class, 'store'])->middleware(['auth'])->name('posts.likes.store');
+Route::delete('/posts/{post}/likes', [LikeController::class, 'destroy'])->middleware(['auth'])->name('posts.likes.destroy');
 
 
 //Siguiendo a usuarios
-Route::post('/{user:username}/follow', [FollowerController::class, 'store'])->name('users.follow');
-Route::post('/{user:username}/unfollow', [FollowerController::class, 'destroy'])->name('users.unfollow');
+Route::post('/{user:username}/follow', [FollowerController::class, 'store'])->middleware(['auth'])->name('users.follow');
+Route::post('/{user:username}/unfollow', [FollowerController::class, 'destroy'])->middleware(['auth'])->name('users.unfollow');
+Route::post('/{user:username}/solicitar-follow', [FollowerController::class, 'solicitar_follow'])->middleware(['auth'])->name('users.solicitar-follow');
+Route::get('/{user:username}/confirm-follow', [FollowerController::class, 'show_confirmar_follow'])->middleware(['user.privado'])->name('users.show-confirmar-follow');
+Route::post('/{user:username}/confirm-follow', [FollowerController::class, 'confirmar_follow'])->middleware(['auth'])->name('users.confirmar-follow');

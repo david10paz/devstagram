@@ -9,11 +9,13 @@ use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         return view('auth.register');
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         //dd($request);
 
         //Modificar el request
@@ -23,6 +25,7 @@ class RegisterController extends Controller
         $this->validate($request, [
             'name' => 'required|max:30',
             'username' => 'required|unique:users|min:3|max:20',
+            'tipo_cuenta' => 'required',
             'email' => 'required|unique:users|email|max:60',
             'password' => 'required|confirmed|min:6',
         ]);
@@ -31,6 +34,7 @@ class RegisterController extends Controller
         User::create([
             'name' => $request->name,
             'username' => $request->username,
+            'privado' => $request->tipo_cuenta,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
@@ -43,6 +47,5 @@ class RegisterController extends Controller
 
         //Devolvemos a una vista
         return redirect()->route('posts.index', auth()->user()->username);
-
     }
 }

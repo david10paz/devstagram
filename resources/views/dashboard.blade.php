@@ -71,12 +71,24 @@
                                     value="Dejar de seguir" />
                             </form>
                         @else
-                            <form action="{{ route('users.follow', $user) }}" method="POST">
-                                @csrf
-                                <input type="submit"
-                                    class="bg-blue-600 text-white uppercase rounded-full px-3 py-1 text-xs font-bold cursor-pointer"
-                                    value="Seguir" />
-                            </form>
+                            @if ($user->privado == 0)
+                                <form action="{{ route('users.follow', $user) }}" method="POST">
+                                    @csrf
+                                    <input type="submit"
+                                        class="bg-blue-600 text-white uppercase rounded-full px-3 py-1 text-xs font-bold cursor-pointer"
+                                        value="Seguir" />
+                                </form>
+                            @elseif($user->privado == 1 && !$user_pendiente_confirm)
+                                <form action="{{ route('users.solicitar-follow', $user) }}" method="POST">
+                                    @csrf
+                                    <input type="submit"
+                                        class="bg-blue-600 text-white uppercase rounded-full px-3 py-1 text-xs font-bold cursor-pointer"
+                                        value="Seguir (Solicitud a una cuenta privada)" />
+                                </form>
+                            @elseif($user->privado == 1 && $user_pendiente_confirm)
+                                <p class="text-yellow-400 uppercase text-sm text-center font-bold mt-3">Pendiente de
+                                    aprobación<br /> la solicitud de seguimiento</p>
+                            @endif
                         @endif
                     @endif
                 @endauth
@@ -86,23 +98,35 @@
 
     <section>
         <h2 class="text-4xl text-center font-black my-10">Publicaciones</h2>
-        @if ($posts->count() > 0)
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                @foreach ($posts as $post)
-                    <div>
-                        <a href="{{ route('posts.show', [$user, $post]) }}">
-                            <img src="/uploads/{{ $post->imagen }}" alt="Imagen {{ $post->titulo }}">
-                        </a>
+        @auth
+            @if ($user->privado == 1 && !$user->siguiendo(auth()->user()) && $user->id != auth()->user()->id)
+                <p class="text-gray-400 uppercase text-sm text-center font-bold">Esta cuenta es privada.</p>
+            @else
+                @if ($posts->count() > 0)
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        @foreach ($posts as $post)
+                            <div>
+                                <a href="{{ route('posts.show', [$user, $post]) }}">
+                                    <img src="/uploads/{{ $post->imagen }}" alt="Imagen {{ $post->titulo }}">
+                                </a>
+                            </div>
+                        @endforeach
                     </div>
-                @endforeach
-            </div>
-            <div class="my-10">
-                <!-- En el caso de que haya más de 4 posts como hemos definido en el controller hará una paginación -->
-                {{ $posts->links() }}
-            </div>
-        @else
-            <p class="text-gray-400 uppercase text-sm text-center font-bold">No hay posts todavía :(</p>
-        @endif
+                    <div class="my-10">
+                        <!-- En el caso de que haya más de 4 posts como hemos definido en el controller hará una paginación -->
+                        {{ $posts->links() }}
+                    </div>
+                @else
+                    <p class="text-gray-400 uppercase text-sm text-center font-bold">No hay posts todavía :(</p>
+                @endif
+            @endif
+        @endauth
+
+        @guest
+            <p class="text-gray-400 uppercase text-sm text-center font-bold"><a href="{{ route('login') }}"
+                    class="text-blue-600">INICIA SESIÓN</a> o <a href="{{ route('register') }}"
+                    class="text-blue-600">REGÍSTRATE</a> PARA PODER VER LAS PUBLICACIONES DE DEVSTAGRAM</p>
+        @endguest
 
 
     </section>
