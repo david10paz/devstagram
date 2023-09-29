@@ -51,6 +51,7 @@
                     @endauth
                 </div>
 
+                @if($user->descripcion)<p class="text-gray-800 text-sm mb-3 font-bold">{{ $user->descripcion }}</p>@endif
                 <p class="text-gray-800 text-sm mb-3 font-bold">{{ $user->followers->count() }}<span class="font-normal">
                         seguidores</span></p>
                 <p class="text-gray-800 text-sm mb-3 font-bold">{{ $user->followings->count() }}<span class="font-normal">

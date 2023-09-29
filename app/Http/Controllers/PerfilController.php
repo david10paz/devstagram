@@ -63,6 +63,7 @@ class PerfilController extends Controller
         $usuario->imagen = $nombreImagen;
 
 
+        $usuario->descripcion = $request->descripcion;
         $usuario->privado = $request->tipo_cuenta;
         $usuario->save();
 

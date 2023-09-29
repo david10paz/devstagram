@@ -20,6 +20,14 @@
                     @enderror
                 </div>
                 <div class="mb-3">
+                    <label for="descripcion" class="mb-2 block uppercase text-gray-500 font-bold">Descripcion</label>
+                    <textarea rows="5" cols="10" id="descripcion" name="descripcion" placeholder="Tu descripción de usuario"
+                        class="border p-3 w-full rounded-lg @error('descripcion') border-red-500 @enderror">@if (auth()->user()->descripcion){{ auth()->user()->descripcion }}@endif</textarea>
+                    @error('descripcion')
+                        <p class="bg-red-500 text-white rounded-lg text-sm text-center p-2 mt-2">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div class="mb-3">
                     <label for="username" class="mb-2 block uppercase text-gray-500 font-bold">Tipo de cuenta</label>
                     <select id="tipo_cuenta" name="tipo_cuenta"
                         class="w-full rounded-md shadow-sm focus:border-indigo-300 focus:ring 
