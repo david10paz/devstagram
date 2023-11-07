@@ -17,12 +17,20 @@ class ComentarioController extends Controller
 
         //Almacenar el resultado
         Comentario::create([
-            'user_id' => auth()->user()->id,
+            'user_id' => $user->id,
             'post_id' => $post->id,
             'comentario' => $request->comentario
         ]);
 
         //Imprimir mensaje
         return back()->with('mensaje', "Comentario publicado correctamente!!!");
+    }
+
+    public function destroy(Comentario $comentario){
+        
+        $comentario->delete();
+
+        //Imprimir mensaje
+        return back()->with('mensaje', "Comentario eliminado correctamente!!!");
     }
 }

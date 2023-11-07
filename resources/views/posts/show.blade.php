@@ -76,10 +76,10 @@
 
                                 <!-- Intento de borrado mediante JS-->
                                 <!--form id="form-delete-post" onsubmit="deletePost({{ $post->id }})">
-                                                                                                                    @csrf
-                                                                                                                    <input type="submit" value="Eliminar publicación"
-                                                                                                                        class="bg-red-600 transition-colors cursor-pointer uppercase font-bold w-full p-3 text-white rounded-lg" />
-                                                                                                                </form-->
+                                                                                                                                                        @csrf
+                                                                                                                                                        <input type="submit" value="Eliminar publicación"
+                                                                                                                                                            class="bg-red-600 transition-colors cursor-pointer uppercase font-bold w-full p-3 text-white rounded-lg" />
+                                                                                                                                                    </form-->
                             </div>
                         @endif
                     @endauth
@@ -97,7 +97,7 @@
 
                             <p class="text-xl font-bold text-center">Agrega un nuevo comentario</p>
 
-                            <form action="{{ route('comentarios.store', [$user, $post]) }}" method="POST">
+                            <form action="{{ route('comentarios.store', [auth()->user(), $post]) }}" method="POST">
                                 @csrf
                                 <div class="mb-3 mt-5">
                                     <label for="comentario" class="mb-2 block uppercase text-gray-500 font-bold">Comentario</label>
@@ -137,9 +137,29 @@
                                                 <small>{{ $comentario->created_at->diffForHumans() }}</small>
                                             </div>
                                             @auth
-                                                <div class="md:w-1/2">
+                                                <div class="md:w-1/3">
                                                     <p><livewire:like-comentario-post :comentario="$comentario" /></p>
                                                 </div>
+                                                @if (auth()->user()->id == $user->id || $user_comentario->id == auth()->user()->id)
+                                                    <div class="md:w-1/6">
+                                                        <div class="flex gap-4">
+                                                            <form
+                                                                action="{{ route('comentarios.destroy', $comentario) }}"
+                                                                method="POST">
+                                                                @method('DELETE')
+                                                                @csrf
+                                                                <button type="submit">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                                        class="w-6 h-6">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                                            d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                                                    </svg>
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                @endif
                                             @endauth
                                         </div>
                                     </div>
@@ -180,10 +200,10 @@
 
                                 <!-- Intento de borrado mediante JS-->
                                 <!--form id="form-delete-post" onsubmit="deletePost({{ $post->id }})">
-                                                                                                            @csrf
-                                                                                                            <input type="submit" value="Eliminar publicación"
-                                                                                                                class="bg-red-600 transition-colors cursor-pointer uppercase font-bold w-full p-3 text-white rounded-lg" />
-                                                                                                        </form-->
+                                                                                                                                                @csrf
+                                                                                                                                                <input type="submit" value="Eliminar publicación"
+                                                                                                                                                    class="bg-red-600 transition-colors cursor-pointer uppercase font-bold w-full p-3 text-white rounded-lg" />
+                                                                                                                                            </form-->
                             </div>
                         @endif
                     @endauth
@@ -253,7 +273,8 @@
                     </div>
                 </div>
             @else
-                <p class="text-gray-400 uppercase text-sm text-center font-bold">Esta cuenta es privada, no tienes nada que ver.
+                <p class="text-gray-400 uppercase text-sm text-center font-bold">Esta cuenta es privada, no tienes nada que
+                    ver.
                 </p>
             @endif
         @endguest

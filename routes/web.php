@@ -50,6 +50,7 @@ Route::get('/{user:username}/posts/{post}', [PostController::class, 'show'])->na
 Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
 
 Route::post('/{user:username}/posts/{post}', [ComentarioController::class, 'store'])->middleware(['auth'])->name('comentarios.store');
+Route::delete('/comentario-delete/{comentario}', [ComentarioController::class, 'destroy'])->middleware(['auth'])->name('comentarios.destroy');
 
 Route::post('/imagenes', [ImagenController::class, 'store'])->middleware(['auth'])->name('imagenes.store');
 
