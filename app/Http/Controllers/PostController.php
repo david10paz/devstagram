@@ -83,7 +83,14 @@ class PostController extends Controller
 
     public function show(User $user, Post $post)
     {
-        return view('posts.show', ['user' => $user, 'post' => $post]);
+
+        if($post->user_id == $user->id){
+            return view('posts.show', ['user' => $user, 'post' => $post]);
+        }
+        else{
+            return back();
+        }
+
     }
 
     public function destroy(Post $post)
