@@ -1063,6 +1063,9 @@ input:checked + .toggle-bg {
 .ml-auto {
   margin-left: auto;
 }
+.mr-0 {
+  margin-right: 0px;
+}
 .mr-3 {
   margin-right: 0.75rem;
 }

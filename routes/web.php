@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ComentarioController;
 use App\Http\Controllers\FollowerController;
 use App\Http\Controllers\HomeController;
@@ -48,6 +49,13 @@ Route::get('/posts/create', [PostController::class, 'create'])->middleware(['aut
 Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
 Route::get('/{user:username}/posts/{post}', [PostController::class, 'show'])->name('posts.show');
 Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+
+
+//Chat
+Route::get('/chat/{user_emisor}/{user_receptor}', [ChatController::class, 'index'])->name('chat.index');
+Route::post('/chat/{user_emisor}/{user_receptor}', [ChatController::class, 'store'])->middleware(['auth'])->name('chat.store');
+
+
 
 Route::post('/{user:username}/posts/{post}', [ComentarioController::class, 'store'])->middleware(['auth'])->name('comentarios.store');
 Route::delete('/comentario-delete/{comentario}', [ComentarioController::class, 'destroy'])->middleware(['auth'])->name('comentarios.destroy');
